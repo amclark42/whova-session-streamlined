@@ -14,22 +14,7 @@
 
   console.log("Userscript loaded.");
   
-  /* SVG icon from Bootstrap: 
-    https://icons.getbootstrap.com/icons/arrow-bar-right/ */
-  const expandIcon = function () {
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    svg.setAttributeNS(null, 'width', 16);
-    svg.setAttributeNS(null, 'height', 16);
-    svg.setAttributeNS(null, 'viewBox', '0 0 16 16');
-    svg.setAttributeNS(null, 'fill', 'currentColor');
-    path.setAttributeNS(null, 'd', 
-      'M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z');
-    svg.appendChild(path);
-    return svg;
-  };
-  // END expandIcon()
-  
+  /* Create an internal CSS stylesheet for this page. */
   let addStyles = function () {
     var css, styles = '';
     css = document.createElement('style');
@@ -54,6 +39,23 @@
   };
   // END addStyles()
   
+  /* Recreate a SVG icon from Bootstrap:
+      https://icons.getbootstrap.com/icons/arrow-bar-right/ */
+  const expandIcon = function () {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    svg.setAttributeNS(null, 'width', 16);
+    svg.setAttributeNS(null, 'height', 16);
+    svg.setAttributeNS(null, 'viewBox', '0 0 16 16');
+    svg.setAttributeNS(null, 'fill', 'currentColor');
+    path.setAttributeNS(null, 'd', 
+      'M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z');
+    svg.appendChild(path);
+    return svg;
+  };
+  // END expandIcon()
+  
+  /* Tweak the DOM, set up styles, create event listeners. */
   let onLoad = function() {
     var sidebarNav, collapseBtnSide,
         tabListNav, collapseBtnTab;
@@ -83,6 +85,8 @@
   };
   // END onLoad()
   
+  /* When a button is clicked to toggle a sidebar, try to toggle the 'collapsed' 
+    class on the button's parent. */
   let toggleCollapse = function(event) {
     var container = event.target;
     if ( container.nodeName === "BUTTON" ) {
@@ -105,22 +109,15 @@
   //};
   // END toggleNotifications()
   
-  // Make changes when the page has finished loading.
-  // document load may already be complete before this userscript is executed
+  /* Whova keeps loading content after the page is "complete". As such, we wait a 
+    bit before running this userscript. */
   if (document.readyState == 'complete') {
-    // this might be a lie. Better give page a moment to fully load.
-    setTimeout(function() {
-      onLoad();
-    }, 2000);
+    setTimeout(function() { onLoad(); }, 2000);
   }
   else {
-    // Wait until page has loaded
+    // Wait until page has loaded, then wait a bit more.
     window.addEventListener('load',function() {
-      // Content continues to be added after load is fired
-      // Better wait a moment.
-      setTimeout(function() {
-        onLoad();
-      }, 2000);
+      setTimeout(function() { onLoad(); }, 2000);
     });
   }
 })();

@@ -2,7 +2,7 @@
 // @name         Whova Streamlined
 // @namespace    https://github.com/amclark42
 // @version      0.1
-// @description  Remove obtrusive elements of the Whova browser app
+// @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*/Agenda/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
@@ -40,16 +40,19 @@
   // END addStyles()
   
   /* Recreate a SVG icon from Bootstrap:
-      https://icons.getbootstrap.com/icons/arrow-bar-right/ */
+      https://icons.getbootstrap.com/icons/signpost-split/ */
   const expandIcon = function () {
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+        title = document.createElementNS('http://www.w3.org/2000/svg', 'title'),
         path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     svg.setAttributeNS(null, 'width', 16);
     svg.setAttributeNS(null, 'height', 16);
     svg.setAttributeNS(null, 'viewBox', '0 0 16 16');
     svg.setAttributeNS(null, 'fill', 'currentColor');
+    title.appendChild(document.createTextNode('Toggle site navigation'));
     path.setAttributeNS(null, 'd', 
-      'M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z');
+      'M7 7V1.414a1 1 0 0 1 2 0V2h5a1 1 0 0 1 .8.4l.975 1.3a.5.5 0 0 1 0 .6L14.8 5.6a1 1 0 0 1-.8.4H9v10H7v-5H2a1 1 0 0 1-.8-.4L.225 9.3a.5.5 0 0 1 0-.6L1.2 7.4A1 1 0 0 1 2 7h5zm1 3V8H2l-.75 1L2 10h6zm0-5h6l.75-1L14 3H8v2z');
+    svg.appendChild(title);
     svg.appendChild(path);
     return svg;
   };
@@ -68,7 +71,6 @@
     sidebarNav = document.getElementsByClassName('whova-side-navigation-menu')[0];
     sidebarNav.classList.add('collapsed');
     collapseBtnSide.setAttribute('id', 'toggle-sidenav');
-    collapseBtnSide.setAttribute('aria-label', 'Toggle site navigation');
     collapseBtnSide.addEventListener('click', toggleCollapse);
     collapseBtnSide.appendChild(expandIcon());
     /* Prepare the right-hand sidebar too. */
@@ -113,8 +115,7 @@
     bit before running this userscript. */
   if (document.readyState == 'complete') {
     setTimeout(function() { onLoad(); }, 2000);
-  }
-  else {
+  } else {
     // Wait until page has loaded, then wait a bit more.
     window.addEventListener('load',function() {
       setTimeout(function() { onLoad(); }, 2000);

@@ -4,8 +4,9 @@ This is a user script — a Javascript file which will make some changes to a se
 
 1. Hides the left- and right-hand sidebars by default.
 2. Adds buttons which toggle the sidebars open.
-3. Adds a button which will hide all(?) notifications on the page.
-4. Applies some CSS tweaks to the web page structure.
+3. Adds a button which will hide notifications on the page.
+4. Increases the size of the Zoom window.
+5. Applies some CSS tweaks to the web page structure.
 
 
 ## Caveats
@@ -14,7 +15,7 @@ I've only tested this script on Chrome, on a laptop. (Whova + Zoom works best in
 
 I have not tested this script on mobile. I have not tested this on any conference besides Balisage.
 
-I may not be willing or able to fix this script after August 4th, 2023. **Bug reports and pull requests are welcome at any time, however** — even if I can't fix it, you may be able to help the next person who comes along!
+I may not be willing or able to fix this script after August 4th, 2023. **[Bug reports](https://github.com/amclark42/whova-session-streamlined/issues) and pull requests are welcome at any time, however** — even if I can't fix it, you may be able to help the next person who comes along!
 
 
 ## How to install the script
@@ -24,6 +25,18 @@ I may not be willing or able to fix this script after August 4th, 2023. **Bug re
 3. Your userscript manager should open. Look the script over and if it seems good to you, "Install" it.
 4. Once the script is installed, it will run automatically whenever you enter a Whova session. For example, a page with a URL like this: `https://whova.com/portal/webapp/EVENT_NAME/Agenda/SESSION_KEY`
 5. To disable the script, customize it, etc., use your userscript manager extension.
+
+
+## How to update the script (in Tampermonkey)
+
+1. Open your userscript manager extension. Usually you can get to this via an icon near your URL bar.
+2. Find the index of your installed userscripts. In Tampermonkey, this is called "Installed Userscripts".
+3. Find "Whova Session Streamlined" and click on its name. This will open an editor.
+4. To update the script with the latest from GitHub, open the "File" menu and choose "Check for updates". The editor will refresh with the latest changes.
+
+!['Check for updates' menu option](img/update-script.png)
+
+You can also use the editor interface to make your own changes to the script! Be aware that your changes may be overridden by later updates; you may wish to save your modifications elsewhere.
 
 
 ## Shoutout

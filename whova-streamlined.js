@@ -18,16 +18,17 @@
   let addStyles = function () {
     var css, styles = '';
     css = document.createElement('style');
-    //styles +=  ".small-red-dot, .notification-circle { display: none; }\n";
-    styles += ".collapsed-toggle { padding: 1em 0.5em; }\n";
-    styles += ".collapsed-toggle:hover, .collapsed-toggle:focus { background-color: #cde }\n";
-    styles += ".collapsed-toggle svg { margin: 0 0.5em; }\n";
+    styles +=  ".no-notify .small-red-dot, .no-notify .notification-circle,\n"
+      + ".no-notify .red-tag.solid-tag { display: none; }\n";
+    styles += ".btn-toggle { padding: 1em 0.5em; }\n";
+    styles += ".btn-toggle:hover, .btn-toggle:focus { background-color: #cde }\n";
+    styles += ".btn-toggle svg { margin: 0 0.5em; }\n";
     styles += ".whova-side-navigation-menu.collapsed { min-width:unset; width: auto; }\n"
     styles += ".collapsed.whova-side-navigation-menu #whova-side-navigation-base-section, "
       + ".collapsed.whova-side-navigation-menu #whova-side-nav-scroll { display:none; }\n"
     styles += ".main-content .page-content { flex: 1 1 90%; width: auto; }\n";
     styles += ".agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
-      + "{ min-width: unset; }\n";
+      + "{ min-width: fit-content; }\n";
     styles += ".tab-list-container { min-width: 350px; }\n";
     styles += ".collapsed.tab-list-container { min-width: unset; }\n";
     styles += ".collapsed.tab-list-container .tabs { flex-direction: column; }\n";
@@ -61,12 +62,13 @@
   /* Tweak the DOM, set up styles, create event listeners. */
   let onLoad = function() {
     var sidebarNav, collapseBtnSide,
-        tabListNav, collapseBtnTab;
+        tabListNav, collapseBtnTab, notifyBtn;
     /* Set up a base collapse button. */
     collapseBtnSide = document.createElement('button');
-    collapseBtnSide.classList.add('collapsed-toggle');
-    /* Clone the button for the right-hand sidebar. */
+    collapseBtnSide.classList.add('btn-toggle');
+    /* Clone the button for other uses. */
     collapseBtnTab = collapseBtnSide.cloneNode(true);
+    notifyBtn = collapseBtnSide.cloneNode(true);
     /* Prepare the left-hand sidebar. */
     sidebarNav = document.getElementsByClassName('whova-side-navigation-menu')[0];
     sidebarNav.classList.add('collapsed');
@@ -79,10 +81,12 @@
     collapseBtnTab.setAttribute('id', 'toggle-tablist');
     collapseBtnTab.addEventListener('click', toggleCollapse);
     collapseBtnTab.appendChild(document.createTextNode("Toggle sidebar"));
-    
-    /* Add custom CSS rules. */
+    notifyBtn.appendChild(document.createTextNode("Toggle notifications"));
+    notifyBtn.addEventListener('click', toggleNotifications);
+    /* Add custom CSS rules before placing the new elements in the DOM. */
     addStyles();
     sidebarNav.prepend(collapseBtnSide);
+    tabListNav.prepend(notifyBtn);
     tabListNav.prepend(collapseBtnTab);
   };
   // END onLoad()
@@ -106,9 +110,10 @@
   };
   // END toggleCollapse()
   
-  //let toggleNotifications = function() {
-    
-  //};
+  /* Use a class to prevent notifications from showing up. */
+  let toggleNotifications = function() {
+    document.getElementsByTagName('body')[0].classList.toggle('no-notify');
+  };
   // END toggleNotifications()
   
   /* Whova keeps loading content after the page is "complete". As such, we wait a 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      0.2
+// @version      0.3
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*/Agenda/*

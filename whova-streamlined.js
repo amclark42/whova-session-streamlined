@@ -1,12 +1,10 @@
 // ==UserScript==
-// @name         Whova Streamlined
+// @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42
 // @version      0.1
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*/Agenda/*
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @grant        none
 // ==/UserScript==
 
 (function() {
@@ -18,7 +16,7 @@
   let addStyles = function () {
     var css, styles = '';
     css = document.createElement('style');
-    styles +=  ".no-notify .small-red-dot, .no-notify .notification-circle,\n"
+    styles += ".no-notify .small-red-dot, .no-notify .notification-circle,\n"
       + ".no-notify .red-tag.solid-tag { display: none; }\n";
     styles += ".btn-toggle { padding: 1em 0.5em; }\n";
     styles += ".btn-toggle:hover, .btn-toggle:focus { background-color: #cde }\n";
@@ -33,7 +31,6 @@
     styles += ".collapsed.tab-list-container { min-width: unset; }\n";
     styles += ".collapsed.tab-list-container .tabs { flex-direction: column; }\n";
     styles += ".collapsed.tab-list-container .tab-panel-container { display: none; }\n";
-    
     /* Add CSS styles to <head>. */
     css.appendChild(document.createTextNode(styles));
     document.getElementsByTagName('head')[0].appendChild(css);
@@ -88,6 +85,11 @@
     sidebarNav.prepend(collapseBtnSide);
     tabListNav.prepend(notifyBtn);
     tabListNav.prepend(collapseBtnTab);
+    /* Make sure that clicking a tab in the right-hand nav will toggle the sidebar 
+      open. */
+    document.querySelectorAll('.tabs .tab-btn').forEach( function(btn) {
+      btn.addEventListener('click', toggleCollapseIncidentally);
+    });
   };
   // END onLoad()
   
@@ -110,6 +112,13 @@
   };
   // END toggleCollapse()
   
+  /* When one of the visible tabs is clicked on the right, open the sidebar. */
+  let toggleCollapseIncidentally = function() {
+    document.getElementsByClassName('tab-list-container')[0]
+      .classList.toggle('collapsed', false);
+  };
+  // END toggleCollapseIncidentally()
+  
   /* Use a class to prevent notifications from showing up. */
   let toggleNotifications = function() {
     document.getElementsByTagName('body')[0].classList.toggle('no-notify');
@@ -126,4 +135,5 @@
       setTimeout(function() { onLoad(); }, 2000);
     });
   }
+  
 })();

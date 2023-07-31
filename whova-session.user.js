@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      0.1
+// @version      0.2
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*/Agenda/*
@@ -37,8 +37,6 @@
   };
   // END addStyles()
   
-  const buttonBase = document.createElement('button').classList.add('btn-toggle');
-  
   /* Recreate a SVG icon from Bootstrap:
       https://icons.getbootstrap.com/icons/signpost-split/ */
   const expandIcon = function () {
@@ -58,11 +56,22 @@
   };
   // END expandIcon()
   
+  let isSessionPage = function(page) {
+    var regex = new RegExp('/portal/webapp/[\w_-]+/Agenda/[\w]+');
+    return regex.test(page);
+  };
+  // END isSessionPage()
+  
   /* Tweak the DOM, set up styles, create event listeners. */
   let onLoad = function() {
-    var sidebarNav, collapseBtnSide;
+    var sidebarNav, collapseBtnSide,
+        pageNow, pagePrev,
+        mutationOptions, mutationObserver;
+    pageNow = window.location.pathname;
+    pagePrev = pageNow;
     /* Clone the base toggle button for other uses. */
-    collapseBtnSide = buttonBase.cloneNode(true);
+    collapseBtnSide = document.createElement('button');
+    collapseBtnSide.classList.add('btn-toggle');
     /* Prepare the left-hand sidebar. */
     sidebarNav = document.getElementsByClassName('whova-side-navigation-menu')[0];
     sidebarNav.classList.add('collapsed');
@@ -73,6 +82,22 @@
     addStyles();
     sidebarNav.prepend(collapseBtnSide);
     updateSessionNav();
+    /* Monitor changes to the page, since Whova doesn't fully reload the page when 
+      navigating around. */
+    mutationObserver = new MutationObserver( function(records) {
+      pageNow = window.location.pathname;
+      if ( pageNow !== pagePrev ) {
+        console.log("Whova site navigated to new page: "+pageNow);
+        if ( isSessionPage(pageNow) ) {
+          console.log("Navigated to a Whova session.");
+          updateSessionNav();
+        }
+        pagePrev = pageNow;
+      }
+    });
+    // The kinds of observations to make.
+    mutationOptions = { childList: true, subtree: true };
+    mutationObserver.observe(document, mutationOptions);
   };
   // END onLoad()
   
@@ -111,8 +136,9 @@
   /* Prepare the right-hand sidebar inside a Whova session. */
   let updateSessionNav = function() {
     var tabListNav, collapseBtnTab, notifyBtn;
-    collapseBtnTab = buttonBase.cloneNode(true);
-    notifyBtn = buttonBase.cloneNode(true);
+    collapseBtnTab = document.createElement('button');
+    collapseBtnTab.classList.add('btn-toggle');
+    notifyBtn = collapseBtnTab.cloneNode(true);
     tabListNav = document.getElementsByClassName('tab-list-container')[0];
     tabListNav.classList.add('collapsed');
     collapseBtnTab.setAttribute('id', 'toggle-tablist');

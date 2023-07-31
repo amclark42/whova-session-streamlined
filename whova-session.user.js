@@ -37,6 +37,8 @@
   };
   // END addStyles()
   
+  const buttonBase = document.createElement('button').classList.add('btn-toggle');
+  
   /* Recreate a SVG icon from Bootstrap:
       https://icons.getbootstrap.com/icons/signpost-split/ */
   const expandIcon = function () {
@@ -58,38 +60,19 @@
   
   /* Tweak the DOM, set up styles, create event listeners. */
   let onLoad = function() {
-    var sidebarNav, collapseBtnSide,
-        tabListNav, collapseBtnTab, notifyBtn;
-    /* Set up a base collapse button. */
-    collapseBtnSide = document.createElement('button');
-    collapseBtnSide.classList.add('btn-toggle');
-    /* Clone the button for other uses. */
-    collapseBtnTab = collapseBtnSide.cloneNode(true);
-    notifyBtn = collapseBtnSide.cloneNode(true);
+    var sidebarNav, collapseBtnSide;
+    /* Clone the base toggle button for other uses. */
+    collapseBtnSide = buttonBase.cloneNode(true);
     /* Prepare the left-hand sidebar. */
     sidebarNav = document.getElementsByClassName('whova-side-navigation-menu')[0];
     sidebarNav.classList.add('collapsed');
     collapseBtnSide.setAttribute('id', 'toggle-sidenav');
     collapseBtnSide.addEventListener('click', toggleCollapse);
     collapseBtnSide.appendChild(expandIcon());
-    /* Prepare the right-hand sidebar too. */
-    tabListNav = document.getElementsByClassName('tab-list-container')[0];
-    tabListNav.classList.add('collapsed');
-    collapseBtnTab.setAttribute('id', 'toggle-tablist');
-    collapseBtnTab.addEventListener('click', toggleCollapse);
-    collapseBtnTab.appendChild(document.createTextNode("Toggle sidebar"));
-    notifyBtn.appendChild(document.createTextNode("Toggle notifications"));
-    notifyBtn.addEventListener('click', toggleNotifications);
     /* Add custom CSS rules before placing the new elements in the DOM. */
     addStyles();
     sidebarNav.prepend(collapseBtnSide);
-    tabListNav.prepend(notifyBtn);
-    tabListNav.prepend(collapseBtnTab);
-    /* Make sure that clicking a tab in the right-hand nav will toggle the sidebar 
-      open. */
-    document.querySelectorAll('.tabs .tab-btn').forEach( function(btn) {
-      btn.addEventListener('click', toggleCollapseIncidentally);
-    });
+    updateSessionNav();
   };
   // END onLoad()
   
@@ -124,6 +107,29 @@
     document.getElementsByTagName('body')[0].classList.toggle('no-notify');
   };
   // END toggleNotifications()
+  
+  /* Prepare the right-hand sidebar inside a Whova session. */
+  let updateSessionNav = function() {
+    var tabListNav, collapseBtnTab, notifyBtn;
+    collapseBtnTab = buttonBase.cloneNode(true);
+    notifyBtn = buttonBase.cloneNode(true);
+    tabListNav = document.getElementsByClassName('tab-list-container')[0];
+    tabListNav.classList.add('collapsed');
+    collapseBtnTab.setAttribute('id', 'toggle-tablist');
+    collapseBtnTab.addEventListener('click', toggleCollapse);
+    collapseBtnTab.appendChild(document.createTextNode("Toggle sidebar"));
+    notifyBtn.appendChild(document.createTextNode("Toggle notifications"));
+    notifyBtn.addEventListener('click', toggleNotifications);
+    /* Add new elements to the page. */
+    tabListNav.prepend(notifyBtn);
+    tabListNav.prepend(collapseBtnTab);
+    /* Make sure that clicking a tab in the right-hand nav will toggle the sidebar 
+      open. */
+    document.querySelectorAll('.tabs .tab-btn').forEach( function(btn) {
+      btn.addEventListener('click', toggleCollapseIncidentally);
+    });
+  };
+  // END updateSessionNav()
   
   /* Whova keeps loading content after the page is "complete". As such, we wait a 
     bit before running this userscript. */

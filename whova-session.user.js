@@ -58,8 +58,9 @@
   };
   // END expandIcon()
   
+  /* Test a location pathname to determine if the current page is a Whova session. */
   let isSessionPage = function(page) {
-    var regex = new RegExp('/portal/webapp/[\w_-]+/Agenda/[\w]+');
+    var regex = /\/portal\/webapp\/[\w_]+\/Agenda\/\w+/g;
     return regex.test(page);
   };
   // END isSessionPage()

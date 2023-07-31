@@ -24,3 +24,8 @@ I may not be willing or able to fix this script after August 4th, 2023. **Bug re
 3. Your userscript manager should open. Look the script over and if it seems good to you, "Install" it.
 4. Once the script is installed, it will run automatically whenever you enter a Whova session. For example, a page with a URL like this: `https://whova.com/portal/webapp/EVENT_NAME/Agenda/SESSION_KEY`
 5. To disable the script, customize it, etc., use your userscript manager extension.
+
+
+## Shoutout
+
+Thanks to Terrill for the [Whova Accessibility Fix script](https://github.com/terrill/whova-a11y-fix), which I used as a reference when I got stuck. Thank you for paving the way.

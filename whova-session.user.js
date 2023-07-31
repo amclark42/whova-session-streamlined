@@ -25,6 +25,8 @@
     styles += ".collapsed.whova-side-navigation-menu #whova-side-navigation-base-section, "
       + ".collapsed.whova-side-navigation-menu #whova-side-nav-scroll { display:none; }\n"
     styles += ".main-content .page-content { flex: 1 1 90%; width: auto; }\n";
+    styles += ".session-media-hub-video-player #session-video-iframe, .session-media-hub-video-player .session-external-player-wrapper"
+      + "{ height: 80vh; }";
     styles += ".agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
       + "{ min-width: fit-content; }\n";
     styles += ".tab-list-container { min-width: 350px; }\n";

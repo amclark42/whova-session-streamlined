@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      0.4
+// @version      0.5
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
@@ -84,7 +84,10 @@
     /* Add custom CSS rules before placing the new elements in the DOM. */
     addStyles();
     sidebarNav.prepend(collapseBtnSide);
-    updateSessionNav();
+    /* Only modify the session page if the first page IS the session page. */
+    if ( isSessionPage(pageNow) ) {
+      updateSessionNav();
+    }
     /* Monitor changes to the page, since Whova doesn't fully reload the page when 
       navigating around. */
     mutationObserver = new MutationObserver( function(records) {

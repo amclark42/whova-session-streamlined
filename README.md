@@ -23,11 +23,15 @@ I may not be willing or able to fix this script after August 4th, 2023. **[Bug r
 1. Install a userscript manager. I used [Tampermonkey for Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en).
 2. Open the [Whova Session Streamlined script](https://raw.githubusercontent.com/amclark42/whova-session-streamlined/main/whova-session.user.js). 
 3. Your userscript manager should open. Look the script over and if it seems good to you, "Install" it.
-4. Once the script is installed, it will run automatically whenever you enter a Whova session. For example, a page with a URL like this: `https://whova.com/portal/webapp/EVENT_NAME/Agenda/SESSION_KEY`
-5. To disable the script, customize it, etc., use your userscript manager extension.
+4. Once the script is installed, it will run automatically whenever you enter a Whova event. For example, a page with a URL that starts like this: `https://whova.com/portal/webapp/EVENT_NAME`
+5. To disable the script, customize it, etc., access your userscript manager extension's dashboard.
 
 
 ## How to update the script (in Tampermonkey)
+
+If you access the raw script linked above, Tampermonkey will ask if you want to reinstall, and show you the updated version. It's easy and it works well if you already have this Readme open in a tab!
+
+Alternatively:
 
 1. Open your userscript manager extension. Usually you can get to this via an icon near your URL bar.
 2. Find the index of your installed userscripts. In Tampermonkey, this is called "Installed Userscripts".

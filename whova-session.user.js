@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      0.5
+// @version      0.6
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
@@ -77,13 +77,17 @@
     collapseBtnSide.classList.add('btn-toggle');
     /* Prepare the left-hand sidebar. */
     sidebarNav = document.getElementsByClassName('whova-side-navigation-menu')[0];
-    sidebarNav.classList.add('collapsed');
+    if ( sidebarNav ) {
+      sidebarNav.classList.add('collapsed');
+    }
     collapseBtnSide.setAttribute('id', 'toggle-sidenav');
     collapseBtnSide.addEventListener('click', toggleCollapse);
     collapseBtnSide.appendChild(expandIcon());
-    /* Add custom CSS rules before placing the new elements in the DOM. */
+    /* Add custom CSS rules before directly modifying the DOM. */
     addStyles();
-    sidebarNav.prepend(collapseBtnSide);
+    if ( sidebarNav ) {
+      sidebarNav.prepend(collapseBtnSide);
+    }
     /* Only modify the session page if the first page IS the session page. */
     if ( isSessionPage(pageNow) ) {
       updateSessionNav();
@@ -93,12 +97,13 @@
     mutationObserver = new MutationObserver( function(records) {
       pageNow = window.location.pathname;
       if ( pageNow !== pagePrev ) {
+        pagePrev = pageNow;
         console.log("Whova site navigated to new page: "+pageNow);
         if ( isSessionPage(pageNow) ) {
           console.log("Navigated to a Whova session.");
-          updateSessionNav();
+          /* Wait a bit, letting the DOM settle before making changes. */
+          setTimeout(function() { updateSessionNav(); }, 500);
         }
-        pagePrev = pageNow;
       }
     });
     // The kinds of observations to make.
@@ -128,8 +133,8 @@
   
   /* When one of the visible tabs is clicked on the right, open the sidebar. */
   let toggleCollapseIncidentally = function() {
-    document.getElementsByClassName('tab-list-container')[0]
-      .classList.toggle('collapsed', false);
+    document.getElementsByClassName('tab-list-container')[0].classList.toggle(
+      'collapsed', false);
   };
   // END toggleCollapseIncidentally()
   
@@ -166,11 +171,11 @@
   /* Whova keeps loading content after the page is "complete". As such, we wait a 
     bit before running this userscript. */
   if (document.readyState == 'complete') {
-    setTimeout(function() { onLoad(); }, 2000);
+    setTimeout(function() { onLoad(); }, 2500);
   } else {
     // Wait until page has loaded, then wait a bit more.
     window.addEventListener('load',function() {
-      setTimeout(function() { onLoad(); }, 2000);
+      setTimeout(function() { onLoad(); }, 2500);
     });
   }
   

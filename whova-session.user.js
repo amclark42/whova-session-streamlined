@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      0.6
+// @version      0.7
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
@@ -68,7 +68,7 @@
   /* Tweak the DOM, set up styles, create event listeners. */
   let onLoad = function() {
     var sidebarNav, collapseBtnSide,
-        pageNow, pagePrev,
+        pageNow, pagePrev, sessionModded,
         mutationOptions, mutationObserver;
     pageNow = window.location.pathname;
     pagePrev = pageNow;
@@ -101,9 +101,19 @@
         console.log("Whova site navigated to new page: "+pageNow);
         if ( isSessionPage(pageNow) ) {
           console.log("Navigated to a Whova session.");
-          /* Wait a bit, letting the DOM settle before making changes. */
-          setTimeout(function() { updateSessionNav(); }, 500);
+          sessionModded = false;
         }
+      }
+      if ( isSessionPage(pageNow) && !sessionModded
+            && document.getElementsByClassName('tab-list-container').length > 0 ) {
+        /* Wait a bit before modifying the session navbar. */
+        setTimeout( function() { 
+          if ( !sessionModded ) {
+            sessionModded = true;
+            console.log("Modifying the session navbar.");
+            updateSessionNav();
+          }
+        }, 300);
       }
     });
     // The kinds of observations to make.

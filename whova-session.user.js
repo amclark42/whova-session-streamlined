@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      0.7
+// @version      1.0
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
@@ -76,17 +76,19 @@
     collapseBtnSide = document.createElement('button');
     collapseBtnSide.classList.add('btn-toggle');
     /* Prepare the left-hand sidebar. */
-    sidebarNav = document.getElementsByClassName('whova-side-navigation-menu')[0];
-    if ( sidebarNav ) {
-      sidebarNav.classList.add('collapsed');
-    }
+    sidebarNav = document.getElementsByClassName('whova-side-navigation-menu');
     collapseBtnSide.setAttribute('id', 'toggle-sidenav');
     collapseBtnSide.addEventListener('click', toggleCollapse);
     collapseBtnSide.appendChild(expandIcon());
     /* Add custom CSS rules before directly modifying the DOM. */
     addStyles();
-    if ( sidebarNav ) {
-      sidebarNav.prepend(collapseBtnSide);
+    if ( sidebarNav.length > 0 ) {
+      sidebarNav = sidebarNav[0];
+      try {
+        sidebarNav.prepend(collapseBtnSide);
+      } catch (err) {
+        console.warn("Could not modify the sidebar nav.");
+      }
     }
     /* Only modify the session page if the first page IS the session page. */
     if ( isSessionPage(pageNow) ) {
@@ -104,6 +106,8 @@
           sessionModded = false;
         }
       }
+      /* Make sure that the session tabs navbar has been loaded before making any 
+        changes. */
       if ( isSessionPage(pageNow) && !sessionModded
             && document.getElementsByClassName('tab-list-container').length > 0 ) {
         /* Wait a bit before modifying the session navbar. */
@@ -111,7 +115,10 @@
           if ( !sessionModded ) {
             sessionModded = true;
             console.log("Modifying the session navbar.");
-            updateSessionNav();
+            /* There is a possibility that updateSessionNav() will not have worked. 
+              If so, sessionModded will be re-set and a future mutation may have 
+              better luck. */
+            sessionModded = updateSessionNav();
           }
         }, 300);
       }
@@ -154,27 +161,43 @@
   };
   // END toggleNotifications()
   
-  /* Prepare the right-hand sidebar inside a Whova session. */
+  /* Prepare the right-hand sidebar inside a Whova session. Returns a boolean 
+    indicating whether modifications have been successfully made. */
   let updateSessionNav = function() {
     var tabListNav, collapseBtnTab, notifyBtn;
-    collapseBtnTab = document.createElement('button');
-    collapseBtnTab.classList.add('btn-toggle');
-    notifyBtn = collapseBtnTab.cloneNode(true);
-    tabListNav = document.getElementsByClassName('tab-list-container')[0];
-    tabListNav.classList.add('collapsed');
-    collapseBtnTab.setAttribute('id', 'toggle-tablist');
-    collapseBtnTab.addEventListener('click', toggleCollapse);
-    collapseBtnTab.appendChild(document.createTextNode("Toggle sidebar"));
-    notifyBtn.appendChild(document.createTextNode("Toggle notifications"));
-    notifyBtn.addEventListener('click', toggleNotifications);
-    /* Add new elements to the page. */
-    tabListNav.prepend(notifyBtn);
-    tabListNav.prepend(collapseBtnTab);
-    /* Make sure that clicking a tab in the right-hand nav will toggle the sidebar 
-      open. */
-    document.querySelectorAll('.tabs .tab-btn').forEach( function(btn) {
-      btn.addEventListener('click', toggleCollapseIncidentally);
-    });
+    try {
+      collapseBtnTab = document.createElement('button');
+      collapseBtnTab.classList.add('btn-toggle');
+      notifyBtn = collapseBtnTab.cloneNode(true);
+      tabListNav = document.getElementsByClassName('tab-list-container');
+      /* Make sure the tabs nav is available before making changes. */
+      if ( tabListNav.length > 0 ) {
+        tabListNav = tabListNav[0];
+        tabListNav.classList.add('collapsed');
+      } else {
+        /* If there's nothing in the DOM we can augment, return early. */
+        return false;
+      }
+      collapseBtnTab.setAttribute('id', 'toggle-tablist');
+      collapseBtnTab.addEventListener('click', toggleCollapse);
+      collapseBtnTab.appendChild(document.createTextNode("Toggle sidebar"));
+      notifyBtn.appendChild(document.createTextNode("Toggle notifications"));
+      notifyBtn.addEventListener('click', toggleNotifications);
+      /* Add new elements to the page. */
+      tabListNav.prepend(notifyBtn);
+      tabListNav.prepend(collapseBtnTab);
+      /* Make sure that clicking a tab in the right-hand nav will toggle the sidebar 
+        open. */
+      document.querySelectorAll('.tabs .tab-btn').forEach( function(btn) {
+        btn.addEventListener('click', toggleCollapseIncidentally);
+      });
+    } catch (err) {
+      /* Report the error in the console but recover from it. */
+      console.warn(err);
+      console.log("Userscript recovering.")
+      return false;
+    }
+    return true;
   };
   // END updateSessionNav()
   

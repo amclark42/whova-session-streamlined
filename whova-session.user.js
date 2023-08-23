@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      1.0
+// @version      1.1
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
+// @license      Unlicense
 // ==/UserScript==
 
 (function() {
@@ -40,7 +41,10 @@
   // END addStyles()
   
   /* Recreate a SVG icon from Bootstrap:
-      https://icons.getbootstrap.com/icons/signpost-split/ */
+      https://icons.getbootstrap.com/icons/signpost-split/
+     The icon is (c) 2019-2023 The Bootstrap Authors and released under the MIT license:
+      https://github.com/twbs/icons/blob/main/LICENSE
+   */
   const expandIcon = function () {
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
         title = document.createElementNS('http://www.w3.org/2000/svg', 'title'),

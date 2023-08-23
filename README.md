@@ -8,6 +8,8 @@ This is a user script — a Javascript file which will make some changes to a se
 4. Increases the size of the Zoom window.
 5. Applies some CSS tweaks to the web page structure.
 
+![A screenshot of the simplified interface for a Whova session](img/whova-after-userscript_blurred_md.png)
+
 
 ## Caveats
 

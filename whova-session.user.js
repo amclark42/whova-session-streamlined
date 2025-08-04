@@ -22,18 +22,19 @@
     styles += ".btn-toggle { padding: 1em 0.5em; }\n";
     styles += ".btn-toggle:hover, .btn-toggle:focus { background-color: #cde }\n";
     styles += ".btn-toggle svg { margin: 0 0.5em; }\n";
+    styles += ".main-content .page-content { flex: 1 1 90%; width: auto; }\n";
     styles += ".whova-side-navigation-menu.collapsed { min-width:unset; width: auto; }\n"
     styles += ".collapsed.whova-side-navigation-menu #whova-side-navigation-base-section, "
       + ".collapsed.whova-side-navigation-menu #whova-side-nav-scroll { display:none; }\n"
-    styles += ".main-content .page-content { flex: 1 1 90%; width: auto; }\n";
-    styles += ".session-media-hub-video-player #session-video-iframe, .session-media-hub-video-player .session-external-player-wrapper"
+    /*styles += ".session-media-hub-video-player .session-video-header-buffer, .session-media-hub-video-player .session-external-player-wrapper"
       + "{ height: 80vh; }";
     styles += ".agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
       + "{ min-width: fit-content; }\n";
     styles += ".tab-list-container { min-width: 350px; }\n";
     styles += ".collapsed.tab-list-container { min-width: unset; }\n";
     styles += ".collapsed.tab-list-container .tabs { flex-direction: column; }\n";
-    styles += ".collapsed.tab-list-container .tab-panel-container { display: none; }\n";
+    styles += ".collapsed.tab-list-container .tab-panel-container { display: none; }\n";*/
+      ;
     /* Add CSS styles to <head>. */
     css.appendChild(document.createTextNode(styles));
     document.getElementsByTagName('head')[0].appendChild(css);
@@ -173,11 +174,16 @@
       collapseBtnTab = document.createElement('button');
       collapseBtnTab.classList.add('btn-toggle');
       notifyBtn = collapseBtnTab.cloneNode(true);
-      tabListNav = document.getElementsByClassName('tab-list-container');
+      tabListNav = 
+        document.querySelectorAll('.session-compact-boards-container .tab-list-container');
       /* Make sure the tabs nav is available before making changes. */
       if ( tabListNav.length > 0 ) {
         tabListNav = tabListNav[0];
         tabListNav.classList.add('collapsed');
+        /* If there's already a userscript toggle button, return early. */
+        if ( document.getElementById('toggle-tablist') !== null ) {
+            return true;
+        }
       } else {
         /* If there's nothing in the DOM we can augment, return early. */
         return false;

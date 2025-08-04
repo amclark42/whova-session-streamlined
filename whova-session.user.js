@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      1.1
+// @version      1.2
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
@@ -17,22 +17,24 @@
   let addStyles = function () {
     var css, styles = '';
     css = document.createElement('style');
+    /* Hide notifications with the `no-notify` class. */
     styles += ".no-notify .small-red-dot, .no-notify .notification-circle,\n"
       + ".no-notify .red-tag.solid-tag { display: none; }\n";
+    /* Styles for the buttons added by this script. */
     styles += ".btn-toggle { padding: 1em 0.5em; }\n";
     styles += ".btn-toggle:hover, .btn-toggle:focus { background-color: #cde }\n";
     styles += ".btn-toggle svg { margin: 0 0.5em; }\n";
+    /* Adjust flex behavior of the Zoom window and right-hand sidebar. */
     styles += ".main-content .page-content { flex: 1 1 90%; width: auto; }\n";
+    /* Hide sidebars with the `collapse` class. */
     styles += ".whova-side-navigation-menu.collapsed { min-width:unset; width: auto; }\n"
     styles += ".collapsed.whova-side-navigation-menu #whova-side-navigation-base-section, "
       + ".collapsed.whova-side-navigation-menu #whova-side-nav-scroll { display:none; }\n"
-    /*styles += ".session-media-hub-video-player .session-video-header-buffer, .session-media-hub-video-player .session-external-player-wrapper"
-      + "{ height: 80vh; }";*/
-    /* Undo Whova's minimum width. */
+    /* Adjust the width of the right-hand sidebar. */
     styles += ".agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
       + "{ min-width: fit-content; }\n";
-    /* Styles for collapsibles. */
     styles += ".tab-list-container { min-width: 350px; }\n";
+    /* Styles for collapsible containers. */
     styles += ".collapsed.tab-list-container { min-width: unset; }\n";
     styles += ".collapsed.tab-list-container .tabs { flex-direction: column; }\n";
     styles += ".collapsed.tab-list-container .tab-panel-container { display: none; }\n";

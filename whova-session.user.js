@@ -13,6 +13,8 @@
 
   console.log("Userscript loaded.");
   
+  let pageClassName = 'streamlined-interface';
+  
   /* Create an internal CSS stylesheet for this page. */
   let addStyles = function () {
     var css, styles = '';
@@ -35,8 +37,8 @@
       their own <style> later. */
     styles += ".main-content .agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
       + "{ min-width: fit-content; }\n";
-    styles += ".tab-list-container { min-width: 350px; }\n";
     /* Styles for collapsible containers. */
+    styles += ".tab-list-container { min-width: 350px; }\n";
     styles += ".collapsed.tab-list-container { min-width: unset; }\n";
     styles += ".collapsed.tab-list-container .tabs { flex-direction: column; }\n";
     styles += ".collapsed.tab-list-container .tab-panel-container { display: none; }\n";
@@ -178,8 +180,15 @@
   /* Prepare the right-hand sidebar inside a Whova session. Returns a boolean 
     indicating whether modifications have been successfully made. */
   let updateSessionNav = function() {
-    var tabListNav, collapseBtnTab, notifyBtn;
+    var whovaDash, tabListNav, collapseBtnTab, notifyBtn;
     try {
+      /* Try to add a class to the <div> that contains all the interface parts. */
+      whovaDash = document.querySelector('.whova-navigation-header');
+      if ( whovaDash !== null ) {
+        whovaDash = whovaDash.parentElement;
+        whovaDash.classList.add(pageClassName);
+        console.log(whovaDash);
+      }
       collapseBtnTab = document.createElement('button');
       collapseBtnTab.classList.add('btn-toggle');
       notifyBtn = collapseBtnTab.cloneNode(true);

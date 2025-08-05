@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      1.2
+// @version      1.3
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
@@ -40,6 +40,10 @@
     styles += ".collapsed.tab-list-container { min-width: unset; }\n";
     styles += ".collapsed.tab-list-container .tabs { flex-direction: column; }\n";
     styles += ".collapsed.tab-list-container .tab-panel-container { display: none; }\n";
+    /* Make sure the Zoom window fits inside its container. Thanks to Joel Kalvesmaki 
+      (@arithmeticus) for the fix! */
+    styles += ".sharee-container__viewport { transform: scale(0.95) !important; "
+      + "margin-top: 5px !important; }\n";
     /* Add CSS styles to <head>. */
     css.appendChild(document.createTextNode(styles));
     document.getElementsByTagName('head')[0].appendChild(css);

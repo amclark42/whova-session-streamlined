@@ -21,7 +21,7 @@
     styles += ".no-notify .small-red-dot, .no-notify .notification-circle,\n"
       + ".no-notify .red-tag.solid-tag { display: none; }\n";
     /* Styles for the buttons added by this script. */
-    styles += ".btn-toggle { padding: 1em 0.5em; }\n";
+    styles += ".btn-toggle { padding: 0.675em 0.5em; }\n";
     styles += ".btn-toggle:hover, .btn-toggle:focus { background-color: #cde }\n";
     styles += ".btn-toggle svg { margin: 0 0.5em; }\n";
     /* Adjust flex behavior of the Zoom window and right-hand sidebar. */
@@ -30,8 +30,10 @@
     styles += ".whova-side-navigation-menu.collapsed { min-width:unset; width: auto; }\n"
     styles += ".collapsed.whova-side-navigation-menu #whova-side-navigation-base-section, "
       + ".collapsed.whova-side-navigation-menu #whova-side-nav-scroll { display:none; }\n"
-    /* Adjust the width of the right-hand sidebar. */
-    styles += ".agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
+    /* Adjust the width of the right-hand sidebar. Note that `.main-content` (or some other earlier 
+      class) is necessary in order to override the minimum width defined by Whova, even if they added 
+      their own <style> later. */
+    styles += ".main-content .agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
       + "{ min-width: fit-content; }\n";
     styles += ".tab-list-container { min-width: 350px; }\n";
     /* Styles for collapsible containers. */

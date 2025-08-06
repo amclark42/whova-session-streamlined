@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Whova Session Streamlined
 // @namespace    https://github.com/amclark42/whova-session-streamlined
-// @version      1.3
+// @version      1.4
 // @description  Remove obtrusive elements of a Whova browser session
 // @author       Ash Clark
 // @match        https://whova.com/portal/webapp/*
@@ -24,10 +24,23 @@
       + ".no-notify .red-tag.solid-tag { display: none; }\n";
     /* Styles for the buttons added by this script. */
     styles += ".btn-toggle { padding: 0.675em 0.5em; }\n";
-    styles += ".btn-toggle:hover, .btn-toggle:focus { background-color: #cde }\n";
+    styles += ".btn-toggle:hover, .btn-toggle:focus { background-color: #cde; }\n";
     styles += ".btn-toggle svg { margin: 0 0.5em; }\n";
+    /* Do a better job with the layout of the session page. As of 2025-08, the <div> that holds the 
+      Whova interface components has no class or ID. So we put on a class of our own, which can then be 
+      used to override the Whova CSS (which is re-written to the <head> on every "page" load, unlike 
+      this CSS, which is written the once). */
+    styles += "."+pageClassName+" { display: flex; flex-direction: column; height: 100vh; }\n";
+    styles += "."+pageClassName+" > * { height: fit-content; }\n";
+    styles += "."+pageClassName+" .whova-navigation-header { position: unset; }\n";
+    styles += "."+pageClassName+" .event-name-banner { padding: 0.5em; margin-top: 0; }\n";
+    /* On my screen, Whova introduced the height of the main components as `calc(100vh - 130px)` (the 
+      height of the viewport minus what the heights they've defined for the Whova header and the event 
+      header. We want that to serve as a starting point for the height; it should fill the entire screen 
+      that's NOT the streamlined headers.  */
+    styles += "."+pageClassName+" .main-content { background-color: #cde; flex: 2 1 calc(100vh - 130px); }\n";
     /* Adjust flex behavior of the Zoom window and right-hand sidebar. */
-    styles += ".main-content .page-content { flex: 1 1 90%; width: auto; }\n";
+    styles += ".main-content .page-content { background-color: white; flex: 1 1 90%; width: auto; }\n";
     /* Hide sidebars with the `collapse` class. */
     styles += ".whova-side-navigation-menu.collapsed { min-width:unset; width: auto; }\n"
     styles += ".collapsed.whova-side-navigation-menu #whova-side-navigation-base-section, "
@@ -35,7 +48,7 @@
     /* Adjust the width of the right-hand sidebar. Note that `.main-content` (or some other earlier 
       class) is necessary in order to override the minimum width defined by Whova, even if they added 
       their own <style> later. */
-    styles += ".main-content .agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
+    styles += "."+pageClassName+" .agendav3-session-details-page-container .agenda-v3-compact-boards-container" 
       + "{ min-width: fit-content; }\n";
     /* Styles for collapsible containers. */
     styles += ".tab-list-container { min-width: 350px; }\n";
